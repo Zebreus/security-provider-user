@@ -80,6 +80,7 @@ Item {
             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
             id: loggedIn
             text: qsTr("Logged in")
+            checked: false
             autoExclusive: false
             checkable: false
         }
