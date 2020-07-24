@@ -1,0 +1,3 @@
+[submodule "libs/jwt-cpp"]
+	path = libs/jwt-cpp
+	url = git@github.com:Zebreus/jwt-cpp.git
