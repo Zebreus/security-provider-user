@@ -55,11 +55,17 @@ Item {
             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
             id: groupBox
             title: qsTr("Your token")
+            Layout.fillWidth: true
+            Layout.maximumWidth: 500
 
-            Text {
+            TextEdit {
                 id: tokenField
                 text: qsTr("No token")
+                wrapMode: Text.WrapAnywhere
                 font.pixelSize: 12
+                selectByMouse: true
+                readOnly: true
+                width: parent.width
             }
         }
 
