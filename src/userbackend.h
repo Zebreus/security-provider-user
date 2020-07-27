@@ -3,7 +3,8 @@
 
 #include <QObject>
 #include <QString>
-#include "securityuserclient.h"
+#include "securityproviderclient.h"
+#include "democlient.h"
 
 class UserBackend : public QObject
 {
@@ -22,7 +23,8 @@ class UserBackend : public QObject
     QString m_serverUrl;
     QString m_token;
     bool m_loggedIn;
-    SecurityUserClient client;
+    SecurityProviderClient client;
+    DemoClient demoClient;
 
 public:
     explicit UserBackend(QObject *parent = nullptr);
@@ -44,7 +46,8 @@ public slots:
     void login();
 private slots:
     void gotToken(QString token);
-    void providerError(SecurityUserClient::Errors e);
+    void providerError(SecurityProviderClient::Error e);
+    void loginStatus(bool status);
 
 signals:
     void usernameChanged(QString username);

@@ -16,8 +16,9 @@ DEFINES += "DISABLE_PICOJSON"
 INCLUDEPATH += $$PWD/libs/jwt-cpp/include
 
 SOURCES += \
+    src/democlient.cpp \
     src/main.cpp \
-    src/securityuserclient.cpp \
+    src/securityproviderclient.cpp \
     src/userbackend.cpp
 
 RESOURCES += res/qml.qrc
@@ -34,5 +35,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    src/securityuserclient.h \
+    src/democlient.h \
+    src/securityproviderclient.h \
     src/userbackend.h

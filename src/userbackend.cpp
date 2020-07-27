@@ -4,8 +4,10 @@ UserBackend::UserBackend(QObject *parent) : QObject(parent)
 {
     m_providerUrl = "ws://localhost:9092";
     m_serverUrl = "ws://localhost:9093";
-    connect(&client, &SecurityUserClient::gotToken, this, &UserBackend::gotToken);
-    connect(&client, &SecurityUserClient::error, this, &UserBackend::providerError);
+    m_loggedIn = false;
+    connect(&client, &SecurityProviderClient::gotToken, this, &UserBackend::gotToken);
+    connect(&client, &SecurityProviderClient::error, this, &UserBackend::providerError);
+    connect(&demoClient, &DemoClient::response, this, &UserBackend::loginStatus);
 }
 
 QString UserBackend::getUsername() const
@@ -85,19 +87,14 @@ void UserBackend::setLoggedIn(bool loggedIn)
 
 void UserBackend::obtainToken()
 {
-    client.setUrl(m_providerUrl);
-    client.open();
-    client.obtainToken(m_username,m_password,QList<QString>{"testclaim"});
+    client.getToken(m_username,m_password,QList<QString>{"testClaim"});
+    client.open(m_providerUrl);
 }
 
 void UserBackend::login()
 {
-    if(m_token == "dummytoken"){
-        m_loggedIn = true;
-    }else{
-        m_loggedIn = false;
-    }
-    emit loggedInChanged(m_loggedIn);
+    demoClient.setUrl(m_serverUrl);
+    demoClient.login(m_token);
 }
 
 void UserBackend::gotToken(QString token)
@@ -106,18 +103,27 @@ void UserBackend::gotToken(QString token)
     emit tokenChanged(token);
 }
 
-void UserBackend::providerError(SecurityUserClient::Errors e)
+void UserBackend::providerError(SecurityProviderClient::Error e)
 {
     switch(e){
-    case SecurityUserClient::Errors::SOCKET_ERROR:
+    case SecurityProviderClient::Error::SOCKET_ERROR:
         m_token = "Server error";
         break;
-    case SecurityUserClient::Errors::PROTOCOL_ERROR:
-        m_token = "Protocol error";
+    case SecurityProviderClient::Error::UNEXPECTED_MESSAGE:
+        m_token = "Unexpected message";
         break;
-    case SecurityUserClient::Errors::AUTHENTICATION_ERROR:
-        m_token = "Authetication error";
+    case SecurityProviderClient::Error::INVALID_RESPONSE:
+        m_token = "Invalid response";
+        break;
+    case SecurityProviderClient::Error::SERVER_ERROR:
+        m_token = "Server Error";
         break;
     }
     emit tokenChanged(m_token);
+}
+
+void UserBackend::loginStatus(bool status)
+{
+    m_loggedIn = status;
+    emit loggedInChanged(status);
 }
