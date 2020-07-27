@@ -1,4 +1,4 @@
-QT += quick
+QT += quick websockets
 
 CONFIG += c++11
 
@@ -17,6 +17,7 @@ INCLUDEPATH += $$PWD/libs/jwt-cpp/include
 
 SOURCES += \
     src/main.cpp \
+    src/securityuserclient.cpp \
     src/userbackend.cpp
 
 RESOURCES += res/qml.qrc
@@ -33,4 +34,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    src/securityuserclient.h \
     src/userbackend.h

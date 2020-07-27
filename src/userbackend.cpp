@@ -4,6 +4,8 @@ UserBackend::UserBackend(QObject *parent) : QObject(parent)
 {
     m_providerUrl = "ws://localhost:9092";
     m_serverUrl = "ws://localhost:9093";
+    connect(&client, &SecurityUserClient::gotToken, this, &UserBackend::gotToken);
+    connect(&client, &SecurityUserClient::error, this, &UserBackend::providerError);
 }
 
 QString UserBackend::getUsername() const
@@ -83,12 +85,9 @@ void UserBackend::setLoggedIn(bool loggedIn)
 
 void UserBackend::obtainToken()
 {
-    if(m_username != "" && m_password != ""){
-        m_token = "dummytoken";
-    }else{
-        m_token = "invalid";
-    }
-    emit tokenChanged(m_token);
+    client.setUrl(m_providerUrl);
+    client.open();
+    client.obtainToken(m_username,m_password,QList<QString>{"testclaim"});
 }
 
 void UserBackend::login()
@@ -99,4 +98,26 @@ void UserBackend::login()
         m_loggedIn = false;
     }
     emit loggedInChanged(m_loggedIn);
+}
+
+void UserBackend::gotToken(QString token)
+{
+    m_token = token;
+    emit tokenChanged(token);
+}
+
+void UserBackend::providerError(SecurityUserClient::Errors e)
+{
+    switch(e){
+    case SecurityUserClient::Errors::SOCKET_ERROR:
+        m_token = "Server error";
+        break;
+    case SecurityUserClient::Errors::PROTOCOL_ERROR:
+        m_token = "Protocol error";
+        break;
+    case SecurityUserClient::Errors::AUTHENTICATION_ERROR:
+        m_token = "Authetication error";
+        break;
+    }
+    emit tokenChanged(m_token);
 }

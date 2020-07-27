@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QString>
+#include "securityuserclient.h"
 
 class UserBackend : public QObject
 {
@@ -21,6 +22,7 @@ class UserBackend : public QObject
     QString m_serverUrl;
     QString m_token;
     bool m_loggedIn;
+    SecurityUserClient client;
 
 public:
     explicit UserBackend(QObject *parent = nullptr);
@@ -38,9 +40,11 @@ public slots:
     void setProviderUrl(QString providerUrl);
     void setServerUrl(QString serverUrl);
     void setLoggedIn(bool loggedIn);
-
     void obtainToken();
     void login();
+private slots:
+    void gotToken(QString token);
+    void providerError(SecurityUserClient::Errors e);
 
 signals:
     void usernameChanged(QString username);
