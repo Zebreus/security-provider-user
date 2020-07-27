@@ -2,7 +2,8 @@
 
 UserBackend::UserBackend(QObject *parent) : QObject(parent)
 {
-
+    m_providerUrl = "ws://localhost:9092";
+    m_serverUrl = "ws://localhost:9093";
 }
 
 QString UserBackend::getUsername() const
