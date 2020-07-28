@@ -2,6 +2,8 @@ QT += quick websockets
 
 CONFIG += c++11
 
+include($$PWD/libs/security-provider/client/client.pri)
+
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
 # depend on your compiler). Refer to the documentation for the
@@ -18,7 +20,6 @@ INCLUDEPATH += $$PWD/libs/jwt-cpp/include
 SOURCES += \
     src/democlient.cpp \
     src/main.cpp \
-    src/securityproviderclient.cpp \
     src/userbackend.cpp
 
 RESOURCES += res/qml.qrc
@@ -36,5 +37,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     src/democlient.h \
-    src/securityproviderclient.h \
     src/userbackend.h

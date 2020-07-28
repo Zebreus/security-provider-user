@@ -5,8 +5,8 @@ UserBackend::UserBackend(QObject *parent) : QObject(parent)
     m_providerUrl = "ws://localhost:9092";
     m_serverUrl = "ws://localhost:9093";
     m_loggedIn = false;
-    connect(&client, &SecurityProviderClient::gotToken, this, &UserBackend::gotToken);
-    connect(&client, &SecurityProviderClient::error, this, &UserBackend::providerError);
+    connect(&client, &securityprovider::Client::gotToken, this, &UserBackend::gotToken);
+    connect(&client, &securityprovider::Client::error, this, &UserBackend::providerError);
     connect(&demoClient, &DemoClient::response, this, &UserBackend::loginStatus);
 }
 
@@ -103,19 +103,19 @@ void UserBackend::gotToken(QString token)
     emit tokenChanged(token);
 }
 
-void UserBackend::providerError(SecurityProviderClient::Error e)
+void UserBackend::providerError(securityprovider::Client::Error e)
 {
     switch(e){
-    case SecurityProviderClient::Error::SOCKET_ERROR:
+    case securityprovider::Client::Error::SOCKET_ERROR:
         m_token = "Server error";
         break;
-    case SecurityProviderClient::Error::UNEXPECTED_MESSAGE:
+    case securityprovider::Client::Error::UNEXPECTED_MESSAGE:
         m_token = "Unexpected message";
         break;
-    case SecurityProviderClient::Error::INVALID_RESPONSE:
+    case securityprovider::Client::Error::INVALID_RESPONSE:
         m_token = "Invalid response";
         break;
-    case SecurityProviderClient::Error::SERVER_ERROR:
+    case securityprovider::Client::Error::SERVER_ERROR:
         m_token = "Server Error";
         break;
     }
