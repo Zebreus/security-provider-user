@@ -90,6 +90,7 @@ QString SecurityProviderClient::buildTokenRequest(const SecurityProviderClient::
     params.append(request.name);
     params.append(request.password);
     params.append(QJsonArray::fromStringList(request.claims));
+    params.append(QJsonArray::fromStringList(request.audiences));
     jsonRequest["params"] = params;
     QJsonDocument doc;
     doc.setObject(jsonRequest);

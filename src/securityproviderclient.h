@@ -9,9 +9,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QJsonArray>
-#include <QTimer>
-
-
 
 class SecurityProviderClient : public QObject
 {
