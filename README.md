@@ -1,2 +1,2 @@
 # security-provider-user
-Obtains signed json web tokens from the security-provider and uses them to log into a server
+A demo user interface for the [securityProvider](https://github.com/Zebreus/securityProvider).
